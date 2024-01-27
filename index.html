@@ -5,42 +5,44 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script></head>
+    <link href="https://fonts.cdnfonts.com/css/the-monster" rel="stylesheet">
 <body>
+    <!-- <h1 class="title">O Matador de Monstros</h1> -->
     <div id="app">
         <div class="panel scores">
             <div class="score">
-                <h1>Jogador</h1>
-                <div class="life-bar">
-                    <div class="life"></div>
+                <div class="player">
+                    <img src="/make-organic-pixel-art-character-animation.gif" alt="jogador">
                 </div>
-                <div></div>
+                <div class="life-bar">
+                    <div class="life" :class="{danger: playerLife < 20}" :style="{width: playerLife + '%'}"></div>
+                </div>
+                <div class="procentagem-vida">{{playerLife}}%</div>
             </div>
             <div class="score">
-                <h1>Monstro</h1>
-                <div class="life-bar">
-                    <div class="life"></div>
+                <div class="monster">
+                    <img src="/monster-hunter-rathalos.gif" alt="monstro">
                 </div>
-                <div></div>
-            </div>
+                <div class="life-bar">
+                    <div class="life" :class="{danger: monsterLife < 20}" :style="{width: monsterLife + '%'}"></div>
+                </div>
+                <div class="procentagem-vida">{{monsterLife}}%</div>
+            </div>        
         </div>
-        <div class="panel result">
-            <div class="win">Você ganhou! </div>
-            <div class="lose">Você perdeu...</div>
+        <div v-if="hasResult" class="panel result">
+            <div v-if="monsterLife == 0" class="win">Você ganhou!</div>
+            <div v-else class="lose">Você perdeu... :(</div>
         </div>
-        <div class="panel buttons">
-            <template>
-                <button class="btn attack">Ataque</button>
-                <button class="btn especial-attack">Ataque Especial</button>
-                <button class="btn heal">Curar</button>
-                <button class="btn give-up">Desistir</button>
+        <div class="panel controls">
+            <template v-if="running">
+                <button class="btn atack"  @click="ataque(false)">Ataque</button>
+                <button class="btn spc-atack" @click="ataque(true)">Ataque Especial</button>
+                <button class="btn heal" @click="healAndHurt">Curar</button>
+                <button class="btn give-up" @click="running = false">Desistir</button>
             </template>
-            <button class="btn new-game">Iniciar Jogo</button>
+            <button v-else class="btn new-game" @click="iniciar">Novo Jogo</button>
         </div>
-        <div class="panel logs">
-            <ul>
-                <li></li>
-            </ul>
-        </div>
+        <div class="panel logs"></div>
     </div>
     <script src="app.js"></script>
 </body>
